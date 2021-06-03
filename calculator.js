@@ -1,6 +1,6 @@
-let runningTotal = 0;
+let total = 0;
 let buffer = "0";
-let previousOperator;
+let previousOperator=null;
 const screen = document.querySelector(".screen");
 
 function buttonClick(value) {
@@ -27,8 +27,8 @@ function handleMath(value) {
   }
 
   const intBuffer = parseInt(buffer);
-  if (runningTotal === 0) {
-    runningTotal = intBuffer;
+  if (total === 0) {
+    total = intBuffer;
   } else {
     flushOperation(intBuffer);
   }
@@ -40,13 +40,13 @@ function handleMath(value) {
 
 function flushOperation(intBuffer) {
   if (previousOperator === "+") {
-    runningTotal += intBuffer;
+    total += intBuffer;
   } else if (previousOperator === "-") {
-    runningTotal -= intBuffer;
+    total -= intBuffer;
   } else if (previousOperator === "×") {
-    runningTotal *= intBuffer;
+    total *= intBuffer;
   } else {
-    runningTotal /= intBuffer;
+    total /= intBuffer;
   }
 }
 
@@ -54,7 +54,7 @@ function handleSymbol(value) {
   switch (value) {
     case "C":
       buffer = "0";
-      runningTotal = 0;
+      total = 0;
       break;
     case "=":
       if (previousOperator === null) {
@@ -63,8 +63,8 @@ function handleSymbol(value) {
       }
       flushOperation(parseInt(buffer));
       previousOperator = null;
-      buffer = +runningTotal;
-      runningTotal = 0;
+      buffer = +total;
+      total = 0;
       break;
     case "🠐":
       if (buffer.length === 1) {
@@ -86,10 +86,7 @@ function rerender() {
   screen.innerText = buffer;
 }
 
-function init() {
-  document.querySelector(".calc-buttons").addEventListener("click", function(event) {
-    buttonClick(event.target.innerText);
-  });
-}
 
-init();
+document.querySelector(".calc-buttons").addEventListener("click", function (event) {
+  buttonClick(event.target.innerText);
+});
